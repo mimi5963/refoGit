@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rest.mapper.RestMapper">
+
+
+<resultMap id="restMap" type="RestaurantVO">
+
+	<id property="id"  column="resId"/>
+	<result property="name" column="name"/>
+	<result property="address" column="address"/>
+	<result property="createdAt" column="r_created_At"/>
+	<result property="updatedAt" column="r_updated_At"/>
+	<collection property="menus" resultMap="menuMap"></collection>
+	<collection property="reviews" resultMap="reviewMap"></collection>
+</resultMap>
+
+
+<resultMap id="menuMap" type="RestaurantMenuVO">
+	<id property="id"  column="rmId"/>
+	<result property="name" column="rm_name"/>
+	<result property="price" column="price"/>
+	<result property="createdAt" column="rm_created_At"/>
+	<result property="updatedAt" column="rm_updated_At"/>
+</resultMap>
+
+<resultMap id="reviewMap" type="ReviewVO">
+     <id property="id"  column="reId"/>
+     <result property="restaurantId" column="re_restruant_id"/>
+     <result  property="content" column="content"/>
+     <result property="score" column="score" />
+     <result property="createdAt" column="re_created_At"/>
+</resultMap>
+
+<resultMap id="restPureMap" type="RestaurantVO">
+	<id property="id"  column="id"/>
+	<result property="name" column="name"/>
+	<result property="address" column="address"/>
+	<result property="createdAt" column="created_At"/>
+	<result property="updatedAt" column="updated_At"/>
+</resultMap>
+
+
+
+<select id="seletAllRestList" resultMap="restPureMap">
+	select * from restaurant
+</select>
+
+<select id="selectRestById" resultMap="restMap">
+select r.id resId, r.name name, r.address address, r.created_at r_created_at, r.updated_at r_updated_at,
+rm.id rmId, rm.name rm_name, rm.price price, rm.created_at rm_created_at, rm.updated_at rm_updated_at, rm.restaurant_id rm_restaurant_id,
+re.id reId, re.restaurant_id re_restaurant_id, re.score score, re.content content, re.created_at re_created_at
+from restaurant r, restaurant_menu rm, review re 
+where r.id = rm.restaurant_id(+)
+AND r.id = re.restaurant_id(+)
+AND r.id = #{id}
+</select>
+
+
+<insert id="insertRest" parameterType="RestaurantVO">
+	<selectKey resultType="Long" keyProperty="id" order="BEFORE">
+		select RES_SEQ.nextval from dual
+	</selectKey>
+	
+	 insert into restaurant values(#{id},#{name},#{address},sysdate,sysdate)
+	
+</insert>
+
+<insert id="insertRestMenu" parameterType="RestaurantMenuVO">
+  insert into restaurant_menu (id, restaurant_id, name, price, created_at, updated_at)
+   values (
+            RES_MENU_SEQ.nextval,
+            #{restaurantId},
+            #{name},
+            #{price},
+            sysdate,
+            sysdate
+     
+	)
+</insert>
+
+
+<update id="updateRest" parameterType="RestUpdateFormVO">
+	update restaurant 
+	<set>
+	 updated_at = sysdate,
+	 <if test=" name != null and name != '' ">
+	 	name=#{name},
+	 </if>
+	 <if test=" address != null and address != '' ">
+	 	address=#{address},
+	 </if>
+	</set>
+	where id=#{id}
+</update>
+
+<delete id="deleteRest" parameterType="long">
+	delete from restaurant where id = #{id}
+</delete>
+
+
+</mapper>
+
+
+
+

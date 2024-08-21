@@ -1,0 +1,19 @@
+server:
+ port: 8081
+ 
+spring: 
+ datasource:
+  driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  url: jdbc:log4jdbc:oracle:thin:@localhost:1521:XE
+  username: kt
+  password: 1234
+
+mybatis:
+ mapper-locations: classpath:mapper/*.xml
+ type-aliases-package: com.rest.domain
+ 
+logging:
+ level:
+  jdbc.sqlonly: DEBUG ## 이부분 추가.
+  org.springframework.web: DEBUG
+  com.zaxxer.hikari.HikariDataSource: ERROR
