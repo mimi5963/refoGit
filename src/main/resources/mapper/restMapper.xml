@@ -14,12 +14,12 @@
 	<result property="createdAt" column="r_created_At"/>
 	<result property="updatedAt" column="r_updated_At"/>
 	<collection property="menus" resultMap="menuMap"></collection>
-	<collection property="reviews" resultMap="reviewMap"></collection>
 </resultMap>
 
 
 <resultMap id="menuMap" type="RestaurantMenuVO">
 	<id property="id"  column="rmId"/>
+	<result property="restaurantId" column="rm_restaurant_id"/>
 	<result property="name" column="rm_name"/>
 	<result property="price" column="price"/>
 	<result property="createdAt" column="rm_created_At"/>
@@ -49,13 +49,11 @@
 </select>
 
 <select id="selectRestById" resultMap="restMap">
-select r.id resId, r.name name, r.address address, r.created_at r_created_at, r.updated_at r_updated_at,
-rm.id rmId, rm.name rm_name, rm.price price, rm.created_at rm_created_at, rm.updated_at rm_updated_at, rm.restaurant_id rm_restaurant_id,
-re.id reId, re.restaurant_id re_restaurant_id, re.score score, re.content content, re.created_at re_created_at
-from restaurant r, restaurant_menu rm, review re 
-where r.id = rm.restaurant_id(+)
-AND r.id = re.restaurant_id(+)
-AND r.id = #{id}
+	select r.id resId, r.name name, r.address address, r.created_at r_created_at, r.updated_at r_updated_at,
+	rm.id rmId, rm.name rm_name, rm.price price, rm.created_at rm_created_at, rm.updated_at rm_updated_at, rm.restaurant_id rm_restaurant_id
+	from restaurant r, restaurant_menu rm
+	where r.id = rm.restaurant_id
+	AND r.id = #{id}
 </select>
 
 

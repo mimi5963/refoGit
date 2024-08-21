@@ -3,13 +3,10 @@ package com.rest.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.rest.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.rest.domain.RestUpdateFormVO;
-import com.rest.domain.RestaurantMenuVO;
-import com.rest.domain.RestaurantVO;
-import com.rest.domain.ReviewFormVO;
 import com.rest.exception.RestNotFoundException;
 import com.rest.mapper.RestMapper;
 
@@ -31,7 +28,7 @@ public class RestServiceImpl implements RestService {
 		return restMapper.seletAllRestList();
 	}
 	@Override
-	public RestaurantVO getRest(Integer id) throws RestNotFoundException{
+	public RestaurantVO getRest(Long id) throws RestNotFoundException{
 		Optional<RestaurantVO> findRestOptional = restMapper.selectRestById(id);
 		RestaurantVO findRest=null;
 		log.info("레스토랑 {}",findRestOptional);
@@ -45,7 +42,7 @@ public class RestServiceImpl implements RestService {
 	}
 	@Override
 	@Transactional
-	public void createRest(RestaurantVO rest) {
+	public void createRest(RestInsertFormVO rest) {
 	restMapper.insertRest(rest);
 	rest.setMenuRestId();
 	for(RestaurantMenuVO vo : rest.getMenus()) {

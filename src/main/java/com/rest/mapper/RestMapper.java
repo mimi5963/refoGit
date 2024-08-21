@@ -3,6 +3,7 @@ package com.rest.mapper;
 import java.util.List;
 import java.util.Optional;
 
+import com.rest.domain.RestInsertFormVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -16,11 +17,11 @@ public interface RestMapper {
 
 	List<RestaurantVO> seletAllRestList();
 
-	Optional<RestaurantVO> selectRestById(Integer id);
+	Optional<RestaurantVO> selectRestById(Long id);
 	
 	boolean insertRestMenu(RestaurantMenuVO rest);
 	
-	void insertRest(RestaurantVO rest);
+	void insertRest(RestInsertFormVO rest);
 	
 	void updateRest(RestUpdateFormVO updateRest);
 
